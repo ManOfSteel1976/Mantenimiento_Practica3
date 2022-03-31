@@ -26,7 +26,10 @@ class AdvertisementBoardTest {
   @Test
   public void PublishAnAdvertisementByTheCompanyIncreasesTheNumberOfAdvertisementsByOne() {
     int expectedValue = board.numberOfPublishedAdvertisements()+1;
-    Advertisement advertisement = new Advertisement("Anuncio de The Company",)
+    Advertisement advertisement = new Advertisement("Anuncio de The Company","soy un anuncio", "THE Company");
+    board.publish(advertisement,null,null);
+    int obtainedValue = board.numberOfPublishedAdvertisements();
+    assertEquals(expectedValue, obtainedValue);
   }
 
   @Test
