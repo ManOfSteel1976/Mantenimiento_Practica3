@@ -43,10 +43,23 @@ public class AdvertisementBoard {
     if (advertisement.advertiser.equals("THE Company"))
       advertisementList.add(advertisement);
     else {
-      if ((advertiserDatabase.findAdviser(advertisement.advertiser)) &&
-              (paymentDatabase.advertiserHasFunds(advertisement.advertiser))) {
-        advertisementList.add(advertisement);
-        paymentDatabase.advertisementPublished(advertisement.advertiser);
+      Advertisement advertisementFound = this.findByTitle(advertisement.title);
+      if (advertisementFound!=null){
+        if (!advertisementFound.advertiser.equals(advertisement.advertiser)) {
+          if ((advertiserDatabase.findAdviser(advertisement.advertiser)) &&
+                  (paymentDatabase.advertiserHasFunds(advertisement.advertiser))) {
+
+            advertisementList.add(advertisement);
+            paymentDatabase.advertisementPublished(advertisement.advertiser);
+          }
+        }
+      }else{
+          if ((advertiserDatabase.findAdviser(advertisement.advertiser)) &&
+                  (paymentDatabase.advertiserHasFunds(advertisement.advertiser))) {
+
+            advertisementList.add(advertisement);
+            paymentDatabase.advertisementPublished(advertisement.advertiser);
+          }
       }
     }
   }

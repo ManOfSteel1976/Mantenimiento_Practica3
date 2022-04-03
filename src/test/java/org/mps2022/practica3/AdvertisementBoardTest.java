@@ -86,7 +86,27 @@ class AdvertisementBoardTest {
   }
 
   @Test
-  public void AnExistingAdvertisementIsNotPublished() {}
+  public void AnExistingAdvertisementIsNotPublished() {
+    Advertisement advertisement1 = new Advertisement("Anuncio de Robin Robot","Me llaman Bender", "Robin Robot");
+    Advertisement advertisement2 = new Advertisement("Anuncio de Robin Robot","Me llaman Bender", "Robin Robot");
+
+    when(advDatabMock.findAdviser(advertisement1.advertiser)).thenReturn(true);
+    when(paymDatabMock.advertiserHasFunds(advertisement1.advertiser)).thenReturn(true);
+
+    board.publish(advertisement1,advDatabMock,paymDatabMock); // Esta debería ser la única invocación de advertisementPublished()
+    int expectedValue = board.numberOfPublishedAdvertisements();
+
+    when(advDatabMock.findAdviser(advertisement2.advertiser)).thenReturn(true);
+    when(paymDatabMock.advertiserHasFunds(advertisement2.advertiser)).thenReturn(true);
+
+    board.publish(advertisement2,advDatabMock,paymDatabMock);
+    int obtainedValue = board.numberOfPublishedAdvertisements();
+
+    assertEquals(expectedValue, obtainedValue);
+
+    // Verificamos que habiendo tratado de insertar dos anuncios iguales seguidos, sólo se publica  el primero
+    verify(paymDatabMock, times(1)).advertisementPublished(anyString());
+  }
 
   @Test
   public void AnExceptionIsRaisedIfTheBoardIsFullAndANewAdvertisementIsPublished() {}
